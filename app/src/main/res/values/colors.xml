@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#3f51b5</color>
+    <color name="primaryDark">#303f9f</color>
+    <color name="primaryLight">#c5cae9</color>
+    <color name="accent">#ff4081</color>
+    <color name="accentDark">#f50057</color>
+    <color name="accentLight">#ff80ab</color>
+    <color name="snackbar_background">#333333</color>
+
+    <color name="text">#202020</color>
+    <color name="secondary_text">#727272</color>
+    <color name="selected_item">#eeeeee</color>
+    <color name="background_selected">#c1e8f7</color>
+
+</resources>

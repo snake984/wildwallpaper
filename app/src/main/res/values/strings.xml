@@ -9,11 +9,11 @@
     <string name="title_activity_parameters">ParametersActivity</string>
     <string name="action_search">Search</string>
     <string name="title_activity_main">MainActivity</string>
-    <string name="home_title_section">Home</string>
-    <string name="pictures_title_section">My Images</string>
-    <string name="diaporama_title_section">SlideShow</string>
-    <string name="help_title_section">Help</string>
-    <string name="parameters_title_section">Parameters</string>
+    <string name="home_title_section">Accueil</string>
+    <string name="pictures_title_section">Mes images</string>
+    <string name="diaporama_title_section">Diaporama</string>
+    <string name="help_title_section">Aide</string>
+    <string name="parameters_title_section">Paramètres</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>
@@ -23,13 +23,41 @@
     <string name="share">Share on Facebook</string>
     <string name="imageAction">Image actions</string>
     <string name="search_hint">Search pictures</string>
-    <string name="title_activity_my_images">MyImagesActivity</string>
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="locate">Locate on Map</string>
     <string name="title_activity_maps">Map</string>
->>>>>>> ebe0362edf8ff5bb41a6af7088fdc9c8f26e5cec
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Nav Drawer Menu Items -->
+    <string-array name="nav_drawer_items">
+        <item>Home</item>
+        <item>Pictures</item>
+        <item>Help</item>
+        <item>Settings</item>
+    </string-array>
+
+    <!-- Nav Drawer List Item Icons -->
+    <!-- Keep them in order as the titles are in -->
+    <array name="nav_drawer_icons">
+        <item>@drawable/ic_earth</item>
+        <item>@drawable/ic_photos</item>
+        <item>@drawable/ic_help</item>
+        <item>@drawable/ic_settings</item>
+    </array>
+
+    <string-array name="picture_extension">
+        <item>.jpg</item>
+        <item>.png</item>
+        <item>.bmp</item>
+    </string-array>
+
+    <!-- Content Description -->
+    <string name="desc_list_item_icon">Item Icon</string>
+    <string name="less">Less</string>
+    <string name="more">More</string>
+    <string name="delete">Delete picture</string>
+    <string name="loading">Loading</string>
+    <string name="please_wait">Please wait</string>
+    <string name="file_deleted">Picture deleted</string>
+    <string name="went_wrong">Something wrong happened</string>
 
 </resources>
