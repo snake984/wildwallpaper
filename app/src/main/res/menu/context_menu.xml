@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/set_wallpaper"
+        android:icon="@drawable/ic_menu_set_as"
+        android:title="@string/set_wallpaper"
+        />
+    <item android:id="@+id/save"
+        android:icon="@drawable/ic_menu_save"
+        android:title="@string/save"
+        />
+    <item android:id="@+id/share"
+        android:icon="@drawable/ic_menu_share"
+        android:title="@string/share"
+        />
+
+    <item android:id="@+id/locate"
+        android:icon="@drawable/ic_action_place"
+        android:title="@string/locate" />
+
+</menu>

@@ -1,0 +1,71 @@
+ECLIPSE ANDROID PROJECT IMPORT SUMMARY
+======================================
+
+Ignored Files:
+--------------
+The following files were *not* copied into the new Gradle project; you
+should evaluate whether these are still needed in your project and if
+so manually move them:
+
+* .gitignore
+* LICENSE
+* README.md
+* ic_launcher-web.png
+* proguard-project.txt
+* tests/
+* tests/.classpath
+* tests/.project
+* tests/assets/
+* tests/assets/reddit.ds/
+* tests/assets/reddit.ds/.json
+* tests/assets/reddit.ds/r/
+* tests/assets/reddit.ds/r/AskReddit/
+* tests/assets/reddit.ds/r/AskReddit/comments/
+* tests/assets/reddit.ds/r/AskReddit/comments/w35ua/
+* tests/assets/reddit.ds/r/AskReddit/comments/w35ua/update_my_girlfriend_of_25_years_told_me_if_i.json
+* tests/assets/reddit.ds/r/askreddit.json
+* tests/assets/reddit.ds/r/nba.json
+* tests/assets/reddit.ds/r/nba/
+* tests/assets/reddit.ds/r/nba/comments/
+* tests/assets/reddit.ds/r/nba/comments/w3bs6/
+* tests/assets/reddit.ds/r/nba/comments/w3bs6/50_years_later_lingering_heat_from_wilt.json
+* tests/assets/reddit.ds/r/politics/
+* tests/assets/reddit.ds/r/politics/comments/
+* tests/assets/reddit.ds/r/politics/comments/wf1t2/
+* tests/assets/reddit.ds/r/politics/comments/wf1t2/melinda_gates_pledges_560000000_for_contraception.json
+* tests/assets/reddit.ds/r/programming.json
+* tests/assets/reddit.ds/r/programming/
+* tests/assets/reddit.ds/r/programming/about.json
+* tests/assets/reddit.ds/r/videos.json
+* tests/assets/reddit.ds/reddits.json
+* tests/assets/reddit.ds/reddits/
+* tests/assets/reddit.ds/reddits/mine.json
+* tests/lint.xml
+* tests/proguard-project.txt
+* tests/project.properties
+
+Moved Files:
+------------
+Android Gradle projects use a different directory structure than ADT
+Eclipse projects. Here's how the projects were restructured:
+
+* AndroidManifest.xml => redditLib/src/main/AndroidManifest.xml
+* res/ => redditLib/src/main/res/
+* src/ => redditLib/src/main/java/
+* tests/res/ => redditLib/src/androidTest/res/
+* tests/src/ => redditLib/src/androidTest/java/
+
+Next Steps:
+-----------
+You can now build the project. The Gradle project needs network
+connectivity to download dependencies.
+
+Bugs:
+-----
+If for some reason your project does not build, and you determine that
+it is due to a bug or limitation of the Eclipse to Gradle importer,
+please file a bug at http://b.android.com with category
+Component-Tools.
+
+(This import summary is for your information only, and can be deleted
+after import once you are satisfied with the results.)
