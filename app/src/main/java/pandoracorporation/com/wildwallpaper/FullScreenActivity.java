@@ -57,7 +57,7 @@ public class FullScreenActivity extends AppCompatActivity {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(getSupportActionBar().isShowing())
+                if (getSupportActionBar().isShowing())
                     getSupportActionBar().hide();
                 else
                     getSupportActionBar().show();
@@ -117,7 +117,7 @@ public class FullScreenActivity extends AppCompatActivity {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                if(!FileHelper.deleteFile(filename)) {
+                if (!FileHelper.deleteFile(filename)) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

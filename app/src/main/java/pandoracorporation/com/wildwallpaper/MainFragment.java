@@ -20,6 +20,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.github.jreddit.entity.Submission;
 import pandoracorporation.com.wildwallpaper.Views.DividerItemDecoration;
 import pandoracorporation.com.wildwallpaper.adapter.PictureAdapter;
@@ -57,6 +58,48 @@ public class MainFragment extends Fragment implements PictureHelper.WallpapersFe
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        //Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_main, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        mHelper = new PictureHelper(getActivity());
+
+        mProgressBar = (ProgressBar) view.findViewById(R.id.main_progressbar);
+        mProgressBar.setVisibility(View.VISIBLE);
+
+        recyclerView = (RecyclerView) view.findViewById(R.id.ListView);
+        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.main_layout);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.primary, R.color.accentLight, R.color.primaryDark,
+                R.color.accent);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mHelper.fetchWallpapers(MainFragment.this);
+                //initWallpapers();
+            }
+        });
+
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        mSwipeRefreshLayout.setDistanceToTriggerSync(400);
+
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(mLayoutManager);
+
+        mHelper.fetchWallpapers(this); //TODO - Faire cette requête dans le onCreate puis set la vue ici
+        //initWallpapers();
+        view.setBackgroundColor(Color.WHITE);
+    }
+
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
@@ -98,46 +141,6 @@ public class MainFragment extends Fragment implements PictureHelper.WallpapersFe
         intent.setClass(getActivity(), MapsActivity.class);
         intent.putExtra("title", textView.getText().toString());
         startActivity(intent);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        //Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main, container, false);
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        mHelper = new PictureHelper(getActivity());
-
-        mProgressBar = (ProgressBar) view.findViewById(R.id.main_progressbar);
-        mProgressBar.setVisibility(View.VISIBLE);
-
-        recyclerView = (RecyclerView) view.findViewById(R.id.ListView);
-        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
-        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.main_layout);
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.primary, R.color.accentLight, R.color.primaryDark,
-                R.color.accent);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mHelper.fetchWallpapers(MainFragment.this);
-                //initWallpapers();
-            }
-        });
-
-        DisplayMetrics displaymetrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-        mSwipeRefreshLayout.setDistanceToTriggerSync(400);
-
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(mLayoutManager);
-
-        mHelper.fetchWallpapers(this);
-        //initWallpapers();
-        view.setBackgroundColor(Color.WHITE);
     }
 
     @Override
@@ -243,5 +246,6 @@ public class MainFragment extends Fragment implements PictureHelper.WallpapersFe
     @Override
     public void onFetchingError() {
         //TODO - Notice user that fetching failed
+        Toast.makeText(getActivity(), "Picture loading failed", Toast.LENGTH_SHORT).show();
     }
 }
