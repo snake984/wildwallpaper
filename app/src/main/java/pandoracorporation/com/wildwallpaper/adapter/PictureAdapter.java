@@ -79,20 +79,6 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.ViewHold
         vh.mSaveButton = (ImageButton) v.findViewById(R.id.save_button);
         vh.mSetButton = (ImageButton) v.findViewById(R.id.set_wallpaper_button);
 
-        /*vh.mSetButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setWallpaper(vh.mImageView);
-            }
-        });*/
-
-        vh.mSaveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO
-            }
-        });
-
         return vh;
     }
 
@@ -247,7 +233,16 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.ViewHold
             mPicture = bitmap;
 
             if (mSetWall) {
-                setWallpaper();
+                Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        Looper.prepare();
+                        setWallpaper();
+                    }
+                };
+
+                Thread thread = new Thread(runnable);
+                thread.start();
             } else {
                 Runnable runnable = new Runnable() {
                     @Override
@@ -275,7 +270,12 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.ViewHold
         public void setWallpaper() {
             try {
                 WallpaperManager.getInstance(mContext).setBitmap(mPicture);
-                Toast.makeText(mContext, "Wallpaper set", Toast.LENGTH_SHORT).show();
+                ((Activity) mContext).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(mContext, "Wallpaper set", Toast.LENGTH_SHORT).show();
+                    }
+                });
             } catch (IOException e) {
                 e.printStackTrace();
             }

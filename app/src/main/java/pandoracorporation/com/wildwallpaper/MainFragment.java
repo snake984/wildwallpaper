@@ -33,15 +33,12 @@ import java.util.List;
 public class MainFragment extends Fragment implements PictureHelper.WallpapersFetchingListener {
 
 
-    private static final String SUBREDDIT = "EarthPorn/";
-    public static View mCurrentItemSelected = null;
-    private ListView imagesList = null;
     private RecyclerView recyclerView;
     private PictureAdapter recyclerViewAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private PictureHelper mHelper;
     private List<Submission> wallpapers;
-    private List<Submission> filtered;
+    private List<Submission> filtered; //TODO - Faire la recherche
     private ProgressBar mProgressBar;
 
 
@@ -50,13 +47,14 @@ public class MainFragment extends Fragment implements PictureHelper.WallpapersFe
     }
 
     public static MainFragment newInstance() {
-        MainFragment fragment = new MainFragment();
-        return fragment;
+        return new MainFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        wallpapers = new ArrayList<>();
     }
 
 
@@ -70,8 +68,6 @@ public class MainFragment extends Fragment implements PictureHelper.WallpapersFe
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mHelper = new PictureHelper(getActivity());
-
         mProgressBar = (ProgressBar) view.findViewById(R.id.main_progressbar);
         mProgressBar.setVisibility(View.VISIBLE);
 
@@ -84,7 +80,6 @@ public class MainFragment extends Fragment implements PictureHelper.WallpapersFe
             @Override
             public void onRefresh() {
                 mHelper.fetchWallpapers(MainFragment.this);
-                //initWallpapers();
             }
         });
 
@@ -95,43 +90,13 @@ public class MainFragment extends Fragment implements PictureHelper.WallpapersFe
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
 
-        mHelper.fetchWallpapers(this); //TODO - Faire cette requête dans le onCreate puis set la vue ici
-        //initWallpapers();
+        recyclerViewAdapter = new PictureAdapter(getActivity(), wallpapers);
+        recyclerView.setAdapter(recyclerViewAdapter);
+
+        mHelper = new PictureHelper(getActivity());
+        mHelper.fetchWallpapers(this);
+
         view.setBackgroundColor(Color.WHITE);
-    }
-
-
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        AdapterView.AdapterContextMenuInfo adapter = (AdapterView.AdapterContextMenuInfo) menuInfo;
-        mCurrentItemSelected = (View) adapter.targetView;
-
-        Log.i("onCreateContextMenu", "in");
-        super.onCreateContextMenu(menu, v, menuInfo);
-        MenuInflater inflater = getActivity().getMenuInflater();
-        inflater.inflate(R.menu.context_menu, menu);
-    }
-
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        Log.i("onContextItemSelected", "in");
-        switch (item.getItemId()) {
-            case R.id.set_wallpaper:
-                return true;
-            case R.id.save:
-                //TODO
-                return true;
-            case R.id.share:
-                //TODO
-                return true;
-            case R.id.locate:
-                activateMapsActivity(mCurrentItemSelected);
-                return true;
-
-            default:
-                return super.onContextItemSelected(item);
-        }
     }
 
     public void activateMapsActivity(View v) {
@@ -189,8 +154,8 @@ public class MainFragment extends Fragment implements PictureHelper.WallpapersFe
             mSwipeRefreshLayout.setRefreshing(false);
         }
 
-        recyclerViewAdapter = new PictureAdapter(getActivity(), mHelper.getWallpapers());
-        recyclerView.setAdapter(recyclerViewAdapter);
+        mHelper.getWallpapers();
+        recyclerViewAdapter.notifyDataSetChanged();
     }
 
 
@@ -233,19 +198,21 @@ public class MainFragment extends Fragment implements PictureHelper.WallpapersFe
     @Override
     public void onWallpapersFetched(List<Submission> wallpapers) {
 
-        mProgressBar.setVisibility(View.INVISIBLE);
+        if (mProgressBar != null && mProgressBar.isShown()) {
+            mProgressBar.setVisibility(View.INVISIBLE);
+        }
 
         if (mSwipeRefreshLayout.isRefreshing()) {
             mSwipeRefreshLayout.setRefreshing(false);
         }
 
-        recyclerViewAdapter = new PictureAdapter(getActivity(), wallpapers);
-        recyclerView.setAdapter(recyclerViewAdapter);
+        this.wallpapers.clear();
+        this.wallpapers.addAll(mHelper.getWallpapers());
+        recyclerViewAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void onFetchingError() {
-        //TODO - Notice user that fetching failed
         Toast.makeText(getActivity(), "Picture loading failed", Toast.LENGTH_SHORT).show();
     }
 }

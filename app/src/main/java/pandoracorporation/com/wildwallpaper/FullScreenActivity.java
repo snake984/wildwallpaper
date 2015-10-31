@@ -13,17 +13,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
+import pandoracorporation.com.wildwallpaper.dao.PictureDao;
+import pandoracorporation.com.wildwallpaper.utils.FileHelper;
 
 import java.io.IOException;
 import java.sql.SQLException;
 
-import pandoracorporation.com.wildwallpaper.dao.PictureDao;
-import pandoracorporation.com.wildwallpaper.utils.FileHelper;
-
 /**
- * Created by TSMIRANI on 16/07/2015.
- * Title
- * Description
+ * Created by TSMIRANI on 16/07/2015. Title Description
  */
 public class FullScreenActivity extends AppCompatActivity {
 
@@ -57,10 +54,11 @@ public class FullScreenActivity extends AppCompatActivity {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (getSupportActionBar().isShowing())
+                if (getSupportActionBar().isShowing()) {
                     getSupportActionBar().hide();
-                else
+                } else {
                     getSupportActionBar().show();
+                }
             }
         });
 
@@ -99,18 +97,38 @@ public class FullScreenActivity extends AppCompatActivity {
                 return true;
 
             case R.id.action_set_wallpaper:
-                try {
-                    String filename = getIntent().getStringExtra("filename");
-                    Bitmap bitmap = FileHelper.openFullSizePicFromFile(filename);
-                    WallpaperManager.getInstance(this).setBitmap(bitmap);
-                    Toast.makeText(this, getString(R.string.wallpaper_changed), Toast.LENGTH_SHORT).show();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                String filename = getIntent().getStringExtra("filename");
+                setWallpaper(filename);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void setWallpaper(final String filename) {
+
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Bitmap bitmap = FileHelper.openFullSizePicFromFile(filename);
+                    WallpaperManager.getInstance(FullScreenActivity.this).setBitmap(bitmap);
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(FullScreenActivity.this, getString(R.string.wallpaper_changed),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        Thread thread = new Thread(runnable);
+        thread.start();
     }
 
     private void deletePicture(final String filename) {
@@ -121,7 +139,8 @@ public class FullScreenActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(getApplicationContext(), getString(R.string.file_deleted), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), getString(R.string.file_deleted),
+                                    Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
