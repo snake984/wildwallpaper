@@ -1,4 +1,4 @@
-package pandoracorporation.com.wildwallpaper;
+package pandoracorporation.com.wildwallpaper.activities;
 
 
 import android.app.Fragment;
@@ -22,6 +22,10 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import pandoracorporation.com.wildwallpaper.fragments.MainFragment;
+import pandoracorporation.com.wildwallpaper.fragments.MyPicturesFragment;
+import pandoracorporation.com.wildwallpaper.R;
+import pandoracorporation.com.wildwallpaper.fragments.SettingsFragment;
 import pandoracorporation.com.wildwallpaper.adapter.NavDrawerListAdapter;
 import pandoracorporation.com.wildwallpaper.dao.PictureDao;
 import pandoracorporation.com.wildwallpaper.model.NavDrawerItem;

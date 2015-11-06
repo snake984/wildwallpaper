@@ -1,4 +1,4 @@
-package pandoracorporation.com.wildwallpaper;
+package pandoracorporation.com.wildwallpaper.activities;
 
 import android.app.Activity;
 import android.app.WallpaperManager;
@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
+import pandoracorporation.com.wildwallpaper.R;
 import pandoracorporation.com.wildwallpaper.dao.PictureDao;
 import pandoracorporation.com.wildwallpaper.utils.FileHelper;
 

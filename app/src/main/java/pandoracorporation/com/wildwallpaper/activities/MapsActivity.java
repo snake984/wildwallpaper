@@ -1,4 +1,4 @@
-package pandoracorporation.com.wildwallpaper;
+package pandoracorporation.com.wildwallpaper.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +15,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import pandoracorporation.com.wildwallpaper.R;
 
 import java.io.IOException;
 import java.util.List;

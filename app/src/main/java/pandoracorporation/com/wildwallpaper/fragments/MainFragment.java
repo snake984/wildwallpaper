@@ -1,4 +1,4 @@
-package pandoracorporation.com.wildwallpaper;
+package pandoracorporation.com.wildwallpaper.fragments;
 
 import android.app.Fragment;
 import android.content.Intent;
@@ -8,21 +8,18 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.github.jreddit.entity.Submission;
+import pandoracorporation.com.wildwallpaper.R;
 import pandoracorporation.com.wildwallpaper.Views.DividerItemDecoration;
+import pandoracorporation.com.wildwallpaper.activities.MapsActivity;
 import pandoracorporation.com.wildwallpaper.adapter.PictureAdapter;
 import pandoracorporation.com.wildwallpaper.utils.PictureHelper;
 

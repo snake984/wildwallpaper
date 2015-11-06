@@ -31,7 +31,7 @@
         <fragment android:id="@+id/main_fragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:name="pandoracorporation.com.wildwallpaper.MainFragment"
+            android:name="pandoracorporation.com.wildwallpaper.fragments.MainFragment"
             tools:layout="@layout/fragment_main"/>
     </FrameLayout>
 </LinearLayout>

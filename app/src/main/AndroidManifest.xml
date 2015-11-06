@@ -24,7 +24,7 @@
 
         <!-- suppress AndroidDomInspection -->
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,7 +35,7 @@
 
 
         <activity
-            android:name=".FullScreenActivity"
+            android:name=".activities.FullScreenActivity"
             android:configChanges="orientation|screenSize">
 
         </activity>
@@ -47,7 +47,7 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyBe5-eCV442wINtx6rgKunQtf11ab1wEEQ" />
 
-        <activity android:name="pandoracorporation.com.wildwallpaper.MapsActivity"
+        <activity android:name=".activities.MapsActivity"
             android:label="@string/title_activity_maps">
         </activity>
     </application>

@@ -25,7 +25,7 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
-import pandoracorporation.com.wildwallpaper.MainActivity;
+import pandoracorporation.com.wildwallpaper.activities.MainActivity;
 import pandoracorporation.com.wildwallpaper.R;
 import pandoracorporation.com.wildwallpaper.dao.PictureDao;
 import pandoracorporation.com.wildwallpaper.utils.FileHelper;
