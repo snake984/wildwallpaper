@@ -3,6 +3,7 @@
 
     <PreferenceCategory android:title="My pictures">
         <Preference
+            android:key="key_clear_pictures"
             android:summary="Delete all saved pictures"
             android:title="Clear pictures" />
 

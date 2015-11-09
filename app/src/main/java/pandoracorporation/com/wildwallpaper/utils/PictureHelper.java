@@ -67,7 +67,7 @@ public class PictureHelper {
         return true;
     }
 
-    public List<Submission> fetchWallpapers(WallpapersFetchingListener listener) {
+    public void fetchWallpapers(WallpapersFetchingListener listener) {
 
         try {
             completedFuture.get();
@@ -80,7 +80,6 @@ public class PictureHelper {
             e.printStackTrace();
             listener.onFetchingError();
         }
-        return wallpapers;
     }
 
     private boolean checkExtension(String url) {
@@ -90,6 +89,7 @@ public class PictureHelper {
             if (url.contains(extensions[i])) {
                 return true;
             }
+            
         }
 
         return false;

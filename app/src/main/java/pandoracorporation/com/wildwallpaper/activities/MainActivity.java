@@ -3,6 +3,7 @@ package pandoracorporation.com.wildwallpaper.activities;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.os.Build;
@@ -22,12 +23,12 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import pandoracorporation.com.wildwallpaper.fragments.MainFragment;
-import pandoracorporation.com.wildwallpaper.fragments.MyPicturesFragment;
 import pandoracorporation.com.wildwallpaper.R;
-import pandoracorporation.com.wildwallpaper.fragments.SettingsFragment;
 import pandoracorporation.com.wildwallpaper.adapter.NavDrawerListAdapter;
 import pandoracorporation.com.wildwallpaper.dao.PictureDao;
+import pandoracorporation.com.wildwallpaper.fragments.MainFragment;
+import pandoracorporation.com.wildwallpaper.fragments.MyPicturesFragment;
+import pandoracorporation.com.wildwallpaper.fragments.SettingsFragment;
 import pandoracorporation.com.wildwallpaper.model.NavDrawerItem;
 
 import java.sql.SQLException;
@@ -94,6 +95,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        if(mCurrentSelectedPosition != 1) {
+            getFragmentManager().popBackStack();
+            displayView(1);
+        }
+    }
+
     private void initNavigationDrawer() {
 
         mTitle = mDrawerTitle = getTitle();
@@ -108,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-        navDrawerItems = new ArrayList<NavDrawerItem>();
+        navDrawerItems = new ArrayList<>();
 
         //region Header Drawer
         LayoutInflater inflater = this.getLayoutInflater();
@@ -200,13 +209,14 @@ public class MainActivity extends AppCompatActivity {
             FragmentManager fragmentManager = getFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.container, fragment, tag).commit();
 
+
             // update selected item and title, then close the drawer
             mDrawerList.setItemChecked(position, true);
             mDrawerList.setSelection(position);
             setTitle(navMenuTitles[position]);
             Log.d("DRAWER", mDrawerLayout.toString());
             mDrawerLayout.closeDrawer(mDrawerList);
-            mCurrentSelectedPosition = position;
+            mCurrentSelectedPosition = position+1;
         } else {
             // error in creating fragment
             Log.e("MainActivity", "Error in creating fragment");

@@ -143,18 +143,6 @@ public class MainFragment extends Fragment implements PictureHelper.WallpapersFe
         return true;
     }
 
-    private void initWallpapers() {
-        mHelper.fetchWallpapers(this);
-        mProgressBar.setVisibility(View.INVISIBLE);
-
-        if (mSwipeRefreshLayout.isRefreshing()) {
-            mSwipeRefreshLayout.setRefreshing(false);
-        }
-
-        mHelper.getWallpapers();
-        recyclerViewAdapter.notifyDataSetChanged();
-    }
-
 
     public void disableRefreshing() {
         mSwipeRefreshLayout.setRefreshing(false);

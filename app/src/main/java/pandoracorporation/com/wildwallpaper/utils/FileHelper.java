@@ -67,7 +67,7 @@ public class FileHelper {
     }
 
     public static boolean deleteFile(String filename) {
-        File file = new File(new File(PICS_DIR), filename);
+        File file = new File(filename);
 
         return file.exists() && file.delete();
     }

@@ -62,7 +62,8 @@ public class PictureDao {
     }
 
     public boolean delete(String filename) {
-        int result = mDatabase.delete(PictureSQLiteHelper.TABLE_PICS, PictureSQLiteHelper.KEY_FILENAME + " = " + "\"" +filename+ "\"", null);
+        int result = mDatabase.delete(PictureSQLiteHelper.TABLE_PICS,
+                PictureSQLiteHelper.KEY_FILENAME + " = " + "\"" + filename + "\"", null);
 
         return result != 0;
     }
@@ -83,6 +84,10 @@ public class PictureDao {
         }
         cursor.close();
         return pictures;
+    }
+
+    public void deleteAll() {
+        mDatabase.execSQL("delete from "+ PictureSQLiteHelper.TABLE_PICS);
     }
 
     private ContentValues cursorToContentValues(Cursor cursor) {

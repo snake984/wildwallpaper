@@ -6,5 +6,5 @@
     android:id="@+id/toolbar"
     android:background="@color/primary"
     android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-    app:contentInsetStart="@dimen/margin_text" />
+    app:contentInsetStart="@dimen/margin_text"
+    app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
