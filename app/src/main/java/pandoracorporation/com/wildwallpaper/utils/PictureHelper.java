@@ -82,14 +82,15 @@ public class PictureHelper {
         }
     }
 
+    //TODO - Enlever le context d'ici
     private boolean checkExtension(String url) {
         String[] extensions = mContext.getResources().getStringArray(R.array.picture_extension);
 
-        for (int i = 0; i < extensions.length; i++) {
-            if (url.contains(extensions[i])) {
+        for (String extension : extensions) {
+            if (url.contains(extension)) {
                 return true;
             }
-            
+
         }
 
         return false;

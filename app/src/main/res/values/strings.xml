@@ -60,5 +60,6 @@
     <string name="file_deleted">Picture deleted</string>
     <string name="went_wrong">Something wrong happened</string>
     <string name="pictures_deleted">Pictures deleted</string>
+    <string name="welcome_message">Welcome to WildWallpaper !</string>
 
 </resources>

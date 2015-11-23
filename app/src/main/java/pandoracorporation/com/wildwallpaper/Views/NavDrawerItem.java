@@ -1,4 +1,4 @@
-package pandoracorporation.com.wildwallpaper.model;
+package pandoracorporation.com.wildwallpaper.views;
 
 /**
  * Created by snake984 on 05/05/2015.

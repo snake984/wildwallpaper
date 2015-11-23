@@ -18,10 +18,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.github.jreddit.entity.Submission;
 import pandoracorporation.com.wildwallpaper.R;
-import pandoracorporation.com.wildwallpaper.Views.DividerItemDecoration;
+import pandoracorporation.com.wildwallpaper.activities.MainActivity;
 import pandoracorporation.com.wildwallpaper.activities.MapsActivity;
 import pandoracorporation.com.wildwallpaper.adapter.PictureAdapter;
 import pandoracorporation.com.wildwallpaper.utils.PictureHelper;
+import pandoracorporation.com.wildwallpaper.views.DividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,15 +31,18 @@ import java.util.List;
 public class MainFragment extends Fragment implements PictureHelper.WallpapersFetchingListener {
 
 
-    private RecyclerView recyclerView;
-    private PictureAdapter recyclerViewAdapter;
+    //region Attributes
+    private RecyclerView mPicturesRecyclerView;
+    private PictureAdapter mPicturesAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private PictureHelper mHelper;
-    private List<Submission> wallpapers;
-    private List<Submission> filtered; //TODO - Faire la recherche
+    private PictureHelper mPictureHelper;
+    private List<Submission> mPictureSubmissionsList;
+    private List<Submission> mFilteredPicturesList; //TODO - Faire la recherche
     private ProgressBar mProgressBar;
+    //endregion
 
 
+    //region Constructor(s)
     public MainFragment() {
         // Required empty public constructor
     }
@@ -46,12 +50,14 @@ public class MainFragment extends Fragment implements PictureHelper.WallpapersFe
     public static MainFragment newInstance() {
         return new MainFragment();
     }
+    //endregion
 
+    //region Fragment lifecycle
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        wallpapers = new ArrayList<>();
+        mPictureSubmissionsList = new ArrayList<>();
     }
 
 
@@ -68,15 +74,16 @@ public class MainFragment extends Fragment implements PictureHelper.WallpapersFe
         mProgressBar = (ProgressBar) view.findViewById(R.id.main_progressbar);
         mProgressBar.setVisibility(View.VISIBLE);
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.ListView);
-        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
+        mPicturesRecyclerView = (RecyclerView) view.findViewById(R.id.ListView);
+        mPicturesRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),
+                DividerItemDecoration.VERTICAL_LIST));
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.main_layout);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.primary, R.color.accentLight, R.color.primaryDark,
                 R.color.accent);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mHelper.fetchWallpapers(MainFragment.this);
+                mPictureHelper.fetchWallpapers(MainFragment.this);
             }
         });
 
@@ -85,24 +92,20 @@ public class MainFragment extends Fragment implements PictureHelper.WallpapersFe
         mSwipeRefreshLayout.setDistanceToTriggerSync(400);
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(mLayoutManager);
+        mPicturesRecyclerView.setLayoutManager(mLayoutManager);
 
-        recyclerViewAdapter = new PictureAdapter(getActivity(), wallpapers);
-        recyclerView.setAdapter(recyclerViewAdapter);
+        mPicturesAdapter = new PictureAdapter(getActivity(), mPictureSubmissionsList);
+        mPicturesRecyclerView.setAdapter(mPicturesAdapter);
 
-        mHelper = new PictureHelper(getActivity());
-        mHelper.fetchWallpapers(this);
+        if (((MainActivity) getActivity()).getSubmissionList() == null) {
+            mPictureHelper = new PictureHelper(getActivity());
+            mPictureHelper.fetchWallpapers(this);
+        } else {
+            mPictureSubmissionsList.clear();
+            mPictureSubmissionsList.addAll(((MainActivity) getActivity()).getSubmissionList());
+        }
 
         view.setBackgroundColor(Color.WHITE);
-    }
-
-    public void activateMapsActivity(View v) {
-        TextView textView = (TextView) v.findViewById(R.id.item_title);
-
-        Intent intent = new Intent();
-        intent.setClass(getActivity(), MapsActivity.class);
-        intent.putExtra("title", textView.getText().toString());
-        startActivity(intent);
     }
 
     @Override
@@ -116,38 +119,26 @@ public class MainFragment extends Fragment implements PictureHelper.WallpapersFe
                 return false;
         }
     }
+    //endregion
 
+    //region Activity launcher
+    public void activateMapsActivity(View v) {
+        TextView textView = (TextView) v.findViewById(R.id.item_title);
 
+        Intent intent = new Intent();
+        intent.setClass(getActivity(), MapsActivity.class);
+        intent.putExtra("title", textView.getText().toString());
+        startActivity(intent);
+    }
+    //endregion
+
+    //region Search methods
+    //TODO - Passer la query string à l'adapter pour qu'ils fassent la recherche
     private List<Submission> searchWallpapers(String searchString) {
-        filtered = new ArrayList<>();
+        mFilteredPicturesList = new ArrayList<>();
 
-        if (wallpapers != null) {
-            for (Submission link : wallpapers) {
-                if (domainAllowed(link.getDomain())) {
-                    String linkTitle = link.getTitle().toLowerCase();
-
-                    if (linkTitle.contains(searchString.toLowerCase())) {
-                        filtered.add(link);
-                    }
-                    // Log.d("Link", link.getDomain() + " " + link.getUrl());
-                }
-            }
-        }
-        return filtered;
+        return mFilteredPicturesList;
     }
-
-    private boolean domainAllowed(String domain) {
-        if (domain.contains("EarthPorn") || (domain.contains("flickr.com") && !domain.contains("static"))) {
-            return false;
-        }
-        return true;
-    }
-
-
-    public void disableRefreshing() {
-        mSwipeRefreshLayout.setRefreshing(false);
-    }
-
 
     private void openSearch(MenuItem item) {
         final SearchView searchView = (SearchView) item.getActionView();
@@ -161,7 +152,7 @@ public class MainFragment extends Fragment implements PictureHelper.WallpapersFe
             @Override
             public boolean onQueryTextChange(String newText) {
                 //imagesList.setAdapter(new ImageAdapter(getActivity(), searchWallpapers(newText)));
-                recyclerView.setAdapter(new PictureAdapter(getActivity(), searchWallpapers(newText)));
+                mPicturesRecyclerView.setAdapter(new PictureAdapter(getActivity(), searchWallpapers(newText)));
                 return true;
             }
         });
@@ -174,12 +165,21 @@ public class MainFragment extends Fragment implements PictureHelper.WallpapersFe
 
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
-                //imagesList.setAdapter(new ImageAdapter(getActivity(), wallpapers));
+                //imagesList.setAdapter(new ImageAdapter(getActivity(), mPictureSubmissionsList));
                 return true;
             }
         });
     }
 
+    //endregion
+
+    //region UI
+    public void disableRefreshing() {
+        mSwipeRefreshLayout.setRefreshing(false);
+    }
+    //endregion
+
+    //region Wallpapers fetching callbacks
     @Override
     public void onWallpapersFetched(List<Submission> wallpapers) {
 
@@ -191,13 +191,15 @@ public class MainFragment extends Fragment implements PictureHelper.WallpapersFe
             mSwipeRefreshLayout.setRefreshing(false);
         }
 
-        this.wallpapers.clear();
-        this.wallpapers.addAll(mHelper.getWallpapers());
-        recyclerViewAdapter.notifyDataSetChanged();
+        this.mPictureSubmissionsList.clear();
+        ((MainActivity) getActivity()).setSubmissionList(mPictureHelper.getWallpapers());
+        this.mPictureSubmissionsList.addAll(mPictureHelper.getWallpapers());
+        mPicturesAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void onFetchingError() {
         Toast.makeText(getActivity(), "Picture loading failed", Toast.LENGTH_SHORT).show();
     }
+    //endregion
 }

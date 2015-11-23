@@ -12,7 +12,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import pandoracorporation.com.wildwallpaper.R;
-import pandoracorporation.com.wildwallpaper.model.NavDrawerItem;
+import pandoracorporation.com.wildwallpaper.views.NavDrawerItem;
 
 /**
  * Created by snake984 on 05/05/2015.

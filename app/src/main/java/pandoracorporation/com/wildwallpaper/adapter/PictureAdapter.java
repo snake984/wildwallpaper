@@ -25,8 +25,8 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
-import pandoracorporation.com.wildwallpaper.activities.MainActivity;
 import pandoracorporation.com.wildwallpaper.R;
+import pandoracorporation.com.wildwallpaper.activities.MainActivity;
 import pandoracorporation.com.wildwallpaper.dao.PictureDao;
 import pandoracorporation.com.wildwallpaper.utils.FileHelper;
 
@@ -283,7 +283,7 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.ViewHold
 
         public void savePicture() {
             String filename = FileHelper.createDirectoryAndSaveFile(mPicture);
-            if (filename.length() > 0) {
+            if (filename != null && filename.length() > 0) {
                 try {
                     mPictureDao.open();
                     mPictureDao.add(filename, picturesLinks.get(mPosition));

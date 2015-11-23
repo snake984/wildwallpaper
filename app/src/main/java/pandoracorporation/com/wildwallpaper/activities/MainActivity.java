@@ -3,7 +3,6 @@ package pandoracorporation.com.wildwallpaper.activities;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.os.Build;
@@ -23,26 +22,29 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import com.github.jreddit.entity.Submission;
 import pandoracorporation.com.wildwallpaper.R;
 import pandoracorporation.com.wildwallpaper.adapter.NavDrawerListAdapter;
 import pandoracorporation.com.wildwallpaper.dao.PictureDao;
 import pandoracorporation.com.wildwallpaper.fragments.MainFragment;
 import pandoracorporation.com.wildwallpaper.fragments.MyPicturesFragment;
 import pandoracorporation.com.wildwallpaper.fragments.SettingsFragment;
-import pandoracorporation.com.wildwallpaper.model.NavDrawerItem;
+import pandoracorporation.com.wildwallpaper.views.NavDrawerItem;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    private DrawerLayout mDrawerLayout;
-    private ListView mDrawerList;
-    private ActionBarDrawerToggle mDrawerToggle;
+    //region Attributes
     private Toolbar mToolbar;
+    private PictureDao mPictureDao;
+    private List<Submission> mSubmissionList; //Liste des posts reddit
+    //endregion
 
-
+    //region Drawer attributes
     // nav drawer title
     private CharSequence mDrawerTitle;
 
@@ -55,54 +57,90 @@ public class MainActivity extends AppCompatActivity {
 
     private ArrayList<NavDrawerItem> navDrawerItems;
     private NavDrawerListAdapter adapter;
-
-    private int mCurrentSelectedPosition = 1;
-
-    private PictureDao mPictureDao;
     private NavDrawerItem mPicturesNavDrawerItem;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private DrawerLayout mDrawerLayout;
+    private ListView mDrawerList;
+    private int mCurrentSelectedPosition = 1;
+    //endregion
 
-
+    //region Activity lifecycle
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d("MAIN", getString(R.string.screen_type));
         setContentView(R.layout.activity_main);
+        mPictureDao = new PictureDao(this);
 
-        if (("phone").equals(getString(R.string.screen_type))) {
-            mPictureDao = new PictureDao(this);
+        //region Toolbar
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        //endregion
 
-            //region Toolbar
-            mToolbar = (Toolbar) findViewById(R.id.toolbar);
-            setSupportActionBar(mToolbar);
-            getSupportActionBar().setHomeButtonEnabled(true);
-            //endregion
-
-            //region Status bar
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                Window window = getWindow();
-                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                window.setStatusBarColor(getResources().getColor(R.color.primaryDark));
-            }
-
-            initNavigationDrawer();
-
-            mTitle = getTitle();
-        } else {
-
-            //TODO - Init drawer
-
-            mTitle = getTitle();
+        //region Status bar
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(getResources().getColor(R.color.primaryDark));
         }
+
+        initNavigationDrawer();
+
+        mTitle = getTitle();
+
     }
+
 
     @Override
     public void onBackPressed() {
-        if(mCurrentSelectedPosition != 1) {
+        if (mCurrentSelectedPosition != 1) {
             getFragmentManager().popBackStack();
             displayView(1);
         }
     }
 
+
+    /***
+     * Called when invalidateOptionsMenu() is triggered
+     */
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // if nav drawer is opened, hide the action items
+        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
+        menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
+        menu.findItem(R.id.action_search).setVisible(!drawerOpen);
+
+        return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        // toggle nav drawer on selecting action bar app icon/title
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return super.onOptionsItemSelected(item);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        // Forward the new configuration the drawer toggle component.
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    //endregion
+
+    //region UI
     private void initNavigationDrawer() {
 
         mTitle = mDrawerTitle = getTitle();
@@ -124,10 +162,7 @@ public class MainActivity extends AppCompatActivity {
         View header = inflater.inflate(R.layout.drawer_header, mDrawerList, false);
 
         TextView username = (TextView) header.findViewById(R.id.username);
-        username.setText("Welcome to WildWallpaper !");
-
-        TextView mail = (TextView) header.findViewById(R.id.email);
-        mail.setText("");
+        username.setText(R.string.welcome_message);
 
         mDrawerList.addHeaderView(header, null, false);
         //endregion
@@ -209,14 +244,13 @@ public class MainActivity extends AppCompatActivity {
             FragmentManager fragmentManager = getFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.container, fragment, tag).commit();
 
-
             // update selected item and title, then close the drawer
             mDrawerList.setItemChecked(position, true);
             mDrawerList.setSelection(position);
             setTitle(navMenuTitles[position]);
             Log.d("DRAWER", mDrawerLayout.toString());
             mDrawerLayout.closeDrawer(mDrawerList);
-            mCurrentSelectedPosition = position+1;
+            mCurrentSelectedPosition = position + 1;
         } else {
             // error in creating fragment
             Log.e("MainActivity", "Error in creating fragment");
@@ -240,57 +274,13 @@ public class MainActivity extends AppCompatActivity {
         mTitle = title;
     }
 
-    /***
-     * Called when invalidateOptionsMenu() is triggered
-     */
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        // if nav drawer is opened, hide the action items
-        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
-        menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
-        menu.findItem(R.id.action_search).setVisible(!drawerOpen);
-
-        return true;
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        // toggle nav drawer on selecting action bar app icon/title
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return super.onOptionsItemSelected(item);
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
 
     public boolean isDrawerOpen() {
         return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(GravityCompat.START);
     }
+    //endregion
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        // Forward the new configuration the drawer toggle component.
-        mDrawerToggle.onConfigurationChanged(newConfig);
-    }
-
-
+    //region Utils
     private int countSavedPictures() {
         int result = 0;
 
@@ -304,6 +294,20 @@ public class MainActivity extends AppCompatActivity {
 
         return result;
     }
+    //endregion
+
+    //region Getters/Setters
+    public List<Submission> getSubmissionList() {
+        return mSubmissionList;
+    }
+
+    public void setSubmissionList(List<Submission> submissionList) {
+        mSubmissionList.clear();
+        mSubmissionList.addAll(submissionList);
+    }
+    //endregion
+
+    //region Drawer interface
 
     /**
      * Slide menu item click listener
@@ -315,5 +319,5 @@ public class MainActivity extends AppCompatActivity {
             displayView(position);
         }
     }
-
+    //endregion
 }

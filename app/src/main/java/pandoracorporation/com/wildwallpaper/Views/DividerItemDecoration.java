@@ -1,4 +1,4 @@
-package pandoracorporation.com.wildwallpaper.Views;
+package pandoracorporation.com.wildwallpaper.views;
 
 import android.content.Context;
 import android.content.res.TypedArray;
