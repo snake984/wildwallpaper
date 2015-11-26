@@ -302,6 +302,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setSubmissionList(List<Submission> submissionList) {
+        if (mSubmissionList == null) {
+            mSubmissionList = new ArrayList<>();
+        }
         mSubmissionList.clear();
         mSubmissionList.addAll(submissionList);
     }
