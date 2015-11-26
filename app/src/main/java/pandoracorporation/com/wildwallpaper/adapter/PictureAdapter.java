@@ -70,7 +70,7 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.ViewHold
         CardView v = (CardView) LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.picture_card, viewGroup,
                 false);
 
-        final ViewHolder vh = new ViewHolder(v);
+        ViewHolder vh = new ViewHolder(v);
         vh.mImageView = (ImageView) v.findViewById(R.id.item_image);
         vh.mTextView = (TextView) v.findViewById(R.id.item_title);
         vh.mProgressBar = (ProgressBar) v.findViewById(R.id.image_progress_bar);

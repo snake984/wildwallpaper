@@ -1,47 +1,40 @@
 package pandoracorporation.com.wildwallpaper.adapter;
 
-import android.app.Activity;
 import android.content.ContentValues;
-import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import pandoracorporation.com.wildwallpaper.R;
+import pandoracorporation.com.wildwallpaper.database.PictureSQLiteHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import pandoracorporation.com.wildwallpaper.R;
-import pandoracorporation.com.wildwallpaper.database.PictureSQLiteHelper;
-
 /**
- * Created by TSMIRANI on 15/07/2015.
- * Title
- * Description
+ * Created by TSMIRANI on 15/07/2015. Title Description
  */
-public class GridViewAdapter extends ArrayAdapter {
-    private Context context;
-    private int layoutResourceId;
+public class GridViewAdapter extends RecyclerView.Adapter<GridViewAdapter.ViewHolder> {
+
     private ArrayList pictures = new ArrayList();
     private List<ContentValues> picsInfo;
+    private ViewHolder.OnItemClickListener mItemClickListener;
 
-    public GridViewAdapter(Context context, int layoutResourceId, ArrayList data, List<ContentValues> info) {
-        super(context, layoutResourceId, data);
-        this.layoutResourceId = layoutResourceId;
-        this.context = context;
+    public GridViewAdapter(ArrayList data, List<ContentValues> info, ViewHolder.OnItemClickListener listener) {
         this.pictures = data;
         this.picsInfo = info;
+        this.mItemClickListener = listener;
     }
 
 
     public void remove(String filename) {
-        Log.d("ADA", "deleting: "+filename);
+        Log.d("ADA", "deleting: " + filename);
 
-        for(int i=0; i < picsInfo.size(); i++) {
+        for (int i = 0; i < picsInfo.size(); i++) {
             if (picsInfo.get(i).getAsString(PictureSQLiteHelper.KEY_FILENAME).equals(filename)) {
                 picsInfo.remove(i);
                 pictures.remove(i);
@@ -53,34 +46,50 @@ public class GridViewAdapter extends ArrayAdapter {
     }
 
     @Override
-    public View getView(final int position, final View convertView, ViewGroup parent) {
-        View row = convertView;
-        ViewHolder holder = null;
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.grid_item_layout, parent, false);
 
-        if (row == null) {
-            LayoutInflater inflater = ((Activity) context).getLayoutInflater();
-            row = inflater.inflate(layoutResourceId, parent, false);
-            holder = new ViewHolder();
-            holder.imageTitle = (TextView) row.findViewById(R.id.text);
-            holder.image = (ImageView) row.findViewById(R.id.image);
-            row.setTag(holder);
-        } else {
-            holder = (ViewHolder) row.getTag();
-        }
+        ViewHolder viewHolder = new ViewHolder(v);
+        viewHolder.imageTitle = (TextView) v.findViewById(R.id.image_description);
+        viewHolder.image = (ImageView) v.findViewById(R.id.image_view);
 
+        return viewHolder;
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         ImageItem item = (ImageItem) pictures.get(position);
         holder.imageTitle.setText(item.getTitle());
         holder.image.setImageBitmap(item.getImage());
-        return row;
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mItemClickListener.onItemClick(v, position);
+            }
+        });
     }
 
-    public List<ContentValues> getPicsInfo() {
+    public List<ContentValues> getPicsInfos() {
         return picsInfo;
     }
 
-    static class ViewHolder {
+    @Override
+    public int getItemCount() {
+        return pictures.size();
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView imageTitle;
         ImageView image;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+        }
+
+        public interface OnItemClickListener {
+            void onItemClick(View view, int position);
+        }
     }
 
     public static class ImageItem {

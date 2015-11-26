@@ -35,7 +35,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-
+//TODO - Faire son propre thème (un theme pour api >= 21 et un theme pour api < 21)
 public class MainActivity extends AppCompatActivity {
 
     //region Attributes

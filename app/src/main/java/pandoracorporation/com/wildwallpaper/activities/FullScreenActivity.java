@@ -5,9 +5,12 @@ import android.app.WallpaperManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.transition.Transition;
+import android.transition.TransitionInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,6 +40,14 @@ public class FullScreenActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fullscreen);
+
+
+        //Setting the transition if api level >= 21
+        //TODO - A tester
+        if(Build.VERSION.SDK_INT >= 21) {
+            Transition fade = TransitionInflater.from(this).inflateTransition(R.transition.fade);
+            getWindow().setEnterTransition(fade);
+        }
 
         mPictureDao = new PictureDao(this);
 
