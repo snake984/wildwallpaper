@@ -17,8 +17,8 @@ import pandoracorporation.com.wildwallpaper.database.PictureSQLiteHelper;
 
 /**
  * Created by TSMIRANI on 13/07/2015.
- * Title
- * Description
+ * PictureDao
+ * Dao class for pictures
  */
 public class PictureDao {
 
