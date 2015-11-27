@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.HandlerThread;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.transition.Transition;
@@ -14,6 +15,8 @@ import android.transition.TransitionInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 import pandoracorporation.com.wildwallpaper.R;
@@ -38,22 +41,40 @@ public class FullScreenActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
+        //Setting the transition if api level >= 21
+        if(Build.VERSION.SDK_INT >= 21) {
+            getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+            getWindow().setAllowEnterTransitionOverlap(true);
+            Transition transitionExplode =
+                    TransitionInflater.from(this).inflateTransition(R.transition.explode);
+            getWindow().setEnterTransition(transitionExplode);
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fullscreen);
 
 
-        //Setting the transition if api level >= 21
-        //TODO - A tester
-        if(Build.VERSION.SDK_INT >= 21) {
-            Transition fade = TransitionInflater.from(this).inflateTransition(R.transition.fade);
-            getWindow().setEnterTransition(fade);
-        }
+
 
         mPictureDao = new PictureDao(this);
 
-        String filename = getIntent().getStringExtra("filename");
+        final String filename = getIntent().getStringExtra("filename");
         imageView = (ImageView) findViewById(R.id.imageView);
-        imageView.setImageBitmap(FileHelper.openFullSizePicFromFile(filename));
+        Thread bitmapLoadingThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final Bitmap bitmap = FileHelper.openFullSizePicFromFile(filename);
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        imageView.setImageBitmap(bitmap);
+                    }
+                });
+            }
+        });
+        bitmapLoadingThread.start();
 
         //region Toolbar
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -62,6 +83,15 @@ public class FullScreenActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().hide();
+        //endregion
+
+        //region Status bar
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(getResources().getColor(R.color.black));
+        }
+        //endregion
 
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override

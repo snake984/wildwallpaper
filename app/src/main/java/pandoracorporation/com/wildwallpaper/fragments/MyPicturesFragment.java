@@ -1,11 +1,13 @@
 package pandoracorporation.com.wildwallpaper.fragments;
 
 import android.app.Activity;
+import android.app.ActivityOptions;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,6 +28,8 @@ import pandoracorporation.com.wildwallpaper.views.GridItemDecoration;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.app.ActivityOptions.makeSceneTransitionAnimation;
 
 
 public class MyPicturesFragment extends Fragment implements GridViewAdapter.ViewHolder.OnItemClickListener {
@@ -177,6 +181,12 @@ public class MyPicturesFragment extends Fragment implements GridViewAdapter.View
         Intent intent = new Intent(getActivity(), FullScreenActivity.class);
         intent.putExtra("filename", (String) mGridViewAdapter.getPicsInfos().get(position).get(
                 PictureSQLiteHelper.KEY_FILENAME));
-        startActivityForResult(intent, FullScreenActivity.FULLSCREEN_ACTIVITY);
+
+        if (Build.VERSION.SDK_INT >= 21) {
+            ActivityOptions transitionActivity = makeSceneTransitionAnimation(getActivity());
+            startActivityForResult(intent, FullScreenActivity.FULLSCREEN_ACTIVITY, transitionActivity.toBundle());
+        } else {
+            startActivityForResult(intent, FullScreenActivity.FULLSCREEN_ACTIVITY);
+        }
     }
 }

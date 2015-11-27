@@ -7,6 +7,7 @@
     <color name="accentDark">#f50057</color>
     <color name="accentLight">#ff80ab</color>
     <color name="snackbar_background">#333333</color>
+    <color name="black">#000000</color>
 
     <color name="text">#202020</color>
     <color name="secondary_text">#727272</color>
