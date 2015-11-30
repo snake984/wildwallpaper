@@ -46,6 +46,7 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.ViewHold
     private boolean ellipsized;
     private WallpaperTarget mWallpaperTarget;
     private PictureDao mPictureDao;
+    private List<Submission> mPictures;
 
     //Adapter constructor
     public PictureAdapter(Context context, List<Submission> pics) {
@@ -197,6 +198,11 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.ViewHold
             Toast.makeText(mContext, "Something wrong happened", Toast.LENGTH_SHORT).show();
         }
     }
+
+    public void setPictures(List<Submission> pictures) {
+        mPictures = pictures;
+    }
+
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and

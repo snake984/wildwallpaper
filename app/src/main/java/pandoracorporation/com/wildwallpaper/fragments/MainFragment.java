@@ -4,11 +4,15 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,8 +60,10 @@ public class MainFragment extends Fragment implements PictureHelper.WallpapersFe
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
 
         mPictureSubmissionsList = new ArrayList<>();
+        mFilteredPicturesList = new ArrayList<>();
     }
 
 
@@ -108,13 +114,20 @@ public class MainFragment extends Fragment implements PictureHelper.WallpapersFe
         view.setBackgroundColor(Color.WHITE);
     }
 
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        getActivity().getMenuInflater().inflate(R.menu.main, menu);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
             case R.id.action_search:
                 openSearch(item);
-                return super.onOptionsItemSelected(item);
+                return true;
             default:
                 return false;
         }
@@ -133,15 +146,30 @@ public class MainFragment extends Fragment implements PictureHelper.WallpapersFe
     //endregion
 
     //region Search methods
-    //TODO - Passer la query string à l'adapter pour qu'ils fassent la recherche
-    private List<Submission> searchWallpapers(String searchString) {
-        mFilteredPicturesList = new ArrayList<>();
+    //Search by title and auhtor
+    private List<Submission> searchWallpapers(@NonNull String searchString) {
+        if (mPictureSubmissionsList == null) {
+            return null;
+        }
+
+        if (searchString.length() == 0) {
+            return mPictureSubmissionsList;
+        }
+
+        mFilteredPicturesList.clear();
+        searchString = searchString.toLowerCase();
+        for (Submission submission : mPictureSubmissionsList) {
+            if (submission.getTitle().toLowerCase().contains(searchString) ||
+                    submission.getAuthor().toLowerCase().contains(searchString)) {
+                mFilteredPicturesList.add(submission);
+            }
+        }
 
         return mFilteredPicturesList;
     }
 
     private void openSearch(MenuItem item) {
-        final SearchView searchView = (SearchView) item.getActionView();
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -151,13 +179,14 @@ public class MainFragment extends Fragment implements PictureHelper.WallpapersFe
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                //imagesList.setAdapter(new ImageAdapter(getActivity(), searchWallpapers(newText)));
-                mPicturesRecyclerView.setAdapter(new PictureAdapter(getActivity(), searchWallpapers(newText)));
+                searchWallpapers(newText);
+                mPicturesAdapter.setPictures(mFilteredPicturesList);
+                mPicturesAdapter.notifyDataSetChanged();
                 return true;
             }
         });
 
-        item.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+        MenuItemCompat.setOnActionExpandListener(item, new MenuItemCompat.OnActionExpandListener() {
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
                 return true;
@@ -165,7 +194,8 @@ public class MainFragment extends Fragment implements PictureHelper.WallpapersFe
 
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
-                //imagesList.setAdapter(new ImageAdapter(getActivity(), mPictureSubmissionsList));
+                mPicturesAdapter.setPictures(mPictureSubmissionsList);
+                mPicturesAdapter.notifyDataSetChanged();
                 return true;
             }
         });
