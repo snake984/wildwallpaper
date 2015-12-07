@@ -295,6 +295,8 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.ViewHold
                     mPictureDao.add(filename, picturesLinks.get(mPosition));
                     mPictureDao.close();
 
+                    ((MainActivity)mContext).notifyGallery(filename);
+
                     ((Activity) mContext).runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

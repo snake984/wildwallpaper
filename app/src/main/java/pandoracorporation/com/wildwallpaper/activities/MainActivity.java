@@ -3,10 +3,13 @@ package pandoracorporation.com.wildwallpaper.activities;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -31,6 +34,7 @@ import pandoracorporation.com.wildwallpaper.fragments.MyPicturesFragment;
 import pandoracorporation.com.wildwallpaper.fragments.SettingsFragment;
 import pandoracorporation.com.wildwallpaper.views.NavDrawerItem;
 
+import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -294,6 +298,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return result;
+    }
+
+    //Notifie la galerie Android native de la création d'une nouvelle image
+    public void notifyGallery(@NonNull String filename) {
+        sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(new File(filename))));
     }
     //endregion
 
