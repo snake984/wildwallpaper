@@ -102,6 +102,8 @@ public class MainActivity extends AppCompatActivity {
         if (mCurrentSelectedPosition != 1) {
             getFragmentManager().popBackStack();
             displayView(1);
+        } else {
+            finish();
         }
     }
 
