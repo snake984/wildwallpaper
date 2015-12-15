@@ -130,6 +130,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
+        if(item.getItemId() == R.id.action_settings) {
+            displayView(4);
+        }
+
         // toggle nav drawer on selecting action bar app icon/title
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return super.onOptionsItemSelected(item);
