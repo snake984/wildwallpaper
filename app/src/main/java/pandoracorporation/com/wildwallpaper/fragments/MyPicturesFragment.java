@@ -1,5 +1,6 @@
 package pandoracorporation.com.wildwallpaper.fragments;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityOptions;
 import android.app.Fragment;
@@ -9,6 +10,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -183,10 +188,27 @@ public class MyPicturesFragment extends Fragment implements GridViewAdapter.View
                 PictureSQLiteHelper.KEY_FILENAME));
 
         if (Build.VERSION.SDK_INT >= 21) {
-            ActivityOptions transitionActivity = makeSceneTransitionAnimation(getActivity());
-            startActivityForResult(intent, FullScreenActivity.FULLSCREEN_ACTIVITY, transitionActivity.toBundle());
+            showPictureFullscreenWithExplodeTransition(intent);
+            //showPictureFullscreenWithSharedElementTransition(intent, view);
         } else {
             startActivityForResult(intent, FullScreenActivity.FULLSCREEN_ACTIVITY);
         }
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void showPictureFullscreenWithExplodeTransition(Intent intent) {
+        ActivityOptions transitionActivity = makeSceneTransitionAnimation(getActivity());
+        startActivityForResult(intent, FullScreenActivity.FULLSCREEN_ACTIVITY, transitionActivity.toBundle());
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void showPictureFullscreenWithSharedElementTransition(@NonNull Intent intent,
+                                                                  @NonNull View transitioningView) {
+        Pair participants = new Pair<>(transitioningView, getString(R.string.my_picture_item_shared_transition_name));
+
+        ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                getActivity(), participants);
+
+        ActivityCompat.startActivity(getActivity(), intent, transitionActivityOptions.toBundle());
     }
 }

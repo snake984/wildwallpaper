@@ -24,15 +24,19 @@ import java.util.concurrent.Future;
 public class PictureHelper {
 
     private static final String SUBREDDIT = "EarthPorn/";
+    private static final String[] pictureExtensions = {
+            "jpg",
+            "png",
+            "bmp"
+    };
+
     ExecutorService executorService;
     CompletionService<List<Submission>> completionService;
     Future completedFuture;
     private ArrayList<Submission> wallpapers;
-    private Context mContext;
 
 
-    public PictureHelper(Context context) {
-        mContext = context;
+    public PictureHelper() {
 
         executorService = Executors.newSingleThreadExecutor();
         completionService = new ExecutorCompletionService<>(executorService);
@@ -84,9 +88,8 @@ public class PictureHelper {
 
     //TODO - Enlever le context d'ici
     private boolean checkExtension(String url) {
-        String[] extensions = mContext.getResources().getStringArray(R.array.picture_extension);
 
-        for (String extension : extensions) {
+        for (String extension : pictureExtensions) {
             if (url.contains(extension)) {
                 return true;
             }

@@ -102,7 +102,7 @@ public class MainFragment extends Fragment implements PictureHelper.WallpapersFe
         mPicturesRecyclerView.setAdapter(mPicturesAdapter);
 
         if (((MainActivity) getActivity()).getSubmissionList() == null) {
-            mPictureHelper = new PictureHelper(getActivity());
+            mPictureHelper = new PictureHelper();
             mPictureHelper.fetchWallpapers(this);
         } else {
             mPictureSubmissionsList.clear();

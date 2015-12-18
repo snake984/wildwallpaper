@@ -42,6 +42,12 @@ import java.util.List;
 //TODO - Faire son propre thème (un theme pour api >= 21 et un theme pour api < 21)
 public class MainActivity extends AppCompatActivity {
 
+    public final static String MAIN_TAG = "MAIN_TAG";
+    public final static String MY_PICTURES_TAG = "MY_PICTURES_TAG";
+    public final static String HELP_TAG = "HELP_TAG";
+    public final static String SETTINGS_TAG = "SETTINGS_TAG";
+
+
     //region Attributes
     private Toolbar mToolbar;
     private PictureDao mPictureDao;
@@ -233,19 +239,20 @@ public class MainActivity extends AppCompatActivity {
         switch (position) {
             case 0:
                 fragment = MainFragment.newInstance();
-                tag = "MAIN";
+                tag = MAIN_TAG;
                 break;
             case 1:
                 fragment = MyPicturesFragment.newInstance();
-                tag = "MYPICS";
+                tag = MY_PICTURES_TAG;
                 break;
             case 2:
+                //TODO
                 fragment = MainFragment.newInstance();
-                tag = "HELP";
+                tag = HELP_TAG;
                 break;
             case 3:
                 fragment = SettingsFragment.newInstance();
-                tag = "SETTINGS";
+                tag = SETTINGS_TAG;
                 break;
             default:
                 break;
@@ -264,7 +271,7 @@ public class MainActivity extends AppCompatActivity {
             mCurrentSelectedPosition = position + 1;
         } else {
             // error in creating fragment
-            Log.e("MainActivity", "Error in creating fragment");
+            Log.e(this.getClass().getCanonicalName(), "Error in creating fragment");
         }
     }
 

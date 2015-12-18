@@ -44,12 +44,6 @@
         <item>@drawable/ic_settings</item>
     </array>
 
-    <string-array name="picture_extension">
-        <item>.jpg</item>
-        <item>.png</item>
-        <item>.bmp</item>
-    </string-array>
-
     <!-- Content Description -->
     <string name="desc_list_item_icon">Item Icon</string>
     <string name="less">Less</string>
@@ -61,5 +55,6 @@
     <string name="went_wrong">Something wrong happened</string>
     <string name="pictures_deleted">Pictures deleted</string>
     <string name="welcome_message">Welcome to WildWallpaper !</string>
+    <string name="my_picture_item_shared_transition_name">my_picture_item</string>
 
 </resources>

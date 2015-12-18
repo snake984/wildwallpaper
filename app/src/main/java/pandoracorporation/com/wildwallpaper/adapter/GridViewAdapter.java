@@ -2,6 +2,7 @@ package pandoracorporation.com.wildwallpaper.adapter;
 
 import android.content.ContentValues;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -52,6 +53,9 @@ public class GridViewAdapter extends RecyclerView.Adapter<GridViewAdapter.ViewHo
         ViewHolder viewHolder = new ViewHolder(v);
         viewHolder.imageTitle = (TextView) v.findViewById(R.id.image_description);
         viewHolder.image = (ImageView) v.findViewById(R.id.image_view);
+        if (Build.VERSION.SDK_INT >= 21) {
+            viewHolder.image.setTag(viewHolder.image.getTransitionName());
+        }
 
         return viewHolder;
     }
