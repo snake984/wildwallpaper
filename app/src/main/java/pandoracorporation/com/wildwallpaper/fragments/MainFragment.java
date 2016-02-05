@@ -9,13 +9,13 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.github.jreddit.entity.Submission;
@@ -99,6 +99,7 @@ public class MainFragment extends Fragment implements PictureHelper.WallpapersFe
         mPicturesRecyclerView.setLayoutManager(mLayoutManager);
 
         mPicturesAdapter = new PictureAdapter(getActivity(), mPictureSubmissionsList);
+        mPicturesAdapter.setHasStableIds(true);
         mPicturesRecyclerView.setAdapter(mPicturesAdapter);
 
         if (((MainActivity) getActivity()).getSubmissionList() == null) {
@@ -160,7 +161,7 @@ public class MainFragment extends Fragment implements PictureHelper.WallpapersFe
     }
 
     private void openSearch(MenuItem item) {
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -190,6 +191,9 @@ public class MainFragment extends Fragment implements PictureHelper.WallpapersFe
                 return true;
             }
         });
+
+
+        item.expandActionView();
     }
 
     //endregion

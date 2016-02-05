@@ -46,7 +46,6 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.ViewHold
     private boolean ellipsized;
     private WallpaperTarget mWallpaperTarget;
     private PictureDao mPictureDao;
-    private List<Submission> mPictures;
 
     //Adapter constructor
     public PictureAdapter(Context context, List<Submission> pics) {
@@ -140,6 +139,11 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.ViewHold
     }
 
     @Override
+    public long getItemId(int position) {
+        return picturesLinks.get(position).hashCode();
+    }
+
+    @Override
     public int getItemCount() {
         return picturesLinks.size();
     }
@@ -200,7 +204,7 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.ViewHold
     }
 
     public void setPictures(List<Submission> pictures) {
-        mPictures = pictures;
+        picturesLinks = pictures;
     }
 
 

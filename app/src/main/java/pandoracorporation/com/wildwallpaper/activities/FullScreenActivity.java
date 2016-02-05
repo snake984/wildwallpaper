@@ -82,7 +82,6 @@ public class FullScreenActivity extends AppCompatActivity {
         mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().hide();
         //endregion
 
         //region Status bar
