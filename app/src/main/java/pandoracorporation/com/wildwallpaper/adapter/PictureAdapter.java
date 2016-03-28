@@ -152,7 +152,7 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.ViewHold
         return (int) (str.length() - str.replaceAll(NON_THIN, "").length() / 2);
     }
 
-    public String ellipsize(String text, int max) {
+    private String ellipsize(String text, int max) {
 
         if (textWidth(text) <= max) {
             return text;
@@ -205,6 +205,7 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.ViewHold
 
     public void setPictures(List<Submission> pictures) {
         picturesLinks = pictures;
+        notifyDataSetChanged();
     }
 
 
@@ -227,7 +228,7 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.ViewHold
     }
 
 
-    public class WallpaperTarget implements Target {
+    private class WallpaperTarget implements Target {
 
         private Bitmap mPicture;
         private boolean mSetWall;

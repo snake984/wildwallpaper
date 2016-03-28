@@ -162,6 +162,7 @@ public class MainFragment extends Fragment implements PictureHelper.WallpapersFe
 
     private void openSearch(MenuItem item) {
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+        searchView.setQueryHint(getString(R.string.action_search));
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -171,9 +172,10 @@ public class MainFragment extends Fragment implements PictureHelper.WallpapersFe
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                searchWallpapers(newText);
-                mPicturesAdapter.setPictures(mFilteredPicturesList);
-                mPicturesAdapter.notifyDataSetChanged();
+                if (newText != null && newText.length() > 0) {
+                    searchWallpapers(newText);
+                    mPicturesAdapter.setPictures(mFilteredPicturesList);
+                }
                 return true;
             }
         });
@@ -187,11 +189,9 @@ public class MainFragment extends Fragment implements PictureHelper.WallpapersFe
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 mPicturesAdapter.setPictures(mPictureSubmissionsList);
-                mPicturesAdapter.notifyDataSetChanged();
                 return true;
             }
         });
-
 
         item.expandActionView();
     }

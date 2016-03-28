@@ -7,7 +7,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_help">HelpActivity</string>
     <string name="title_activity_parameters">ParametersActivity</string>
-    <string name="action_search">Search</string>
+    <string name="action_search">Search by title/author</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="home_title_section">Accueil</string>
     <string name="pictures_title_section">Mes images</string>
